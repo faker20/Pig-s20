@@ -1,7 +1,5 @@
 package edu.up.cs301.pig;
 
-import java.util.Random;
-
 import edu.up.cs301.game.GameFramework.GameComputerPlayer;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
@@ -13,12 +11,12 @@ import edu.up.cs301.game.GameFramework.utilities.Tickable;
  * @author Andrew M. Nuxoll
  * @version August 2015
  */
-public class PigComputerPlayer extends GameComputerPlayer {
+public class SmartPigComputerPlayer extends GameComputerPlayer {
 
     /**
      * ctor does nothing extra
      */
-    public PigComputerPlayer(String name) {
+    public SmartPigComputerPlayer(String name) {
         super(name);
     }
 
@@ -33,8 +31,9 @@ public class PigComputerPlayer extends GameComputerPlayer {
         // TODO  You will implement this method
         PigGameState myPig = (PigGameState)info;
         if(myPig.getPlayerid()==super.playerNum){
-            Random rnd = new Random();
-            GameAction act = (rnd.nextBoolean()? new PigRollAction(this) :new PigHoldAction(this));
+            int myScore = (super.playerNum==1)? myPig.player2score : myPig.player1score;
+            int theirScore = (super.playerNum==1)? myPig.player1score : myPig.player2score;
+            GameAction act = (myPig.runTotal<10 || myScore+myPig.runTotal<theirScore-10? new PigRollAction(this) :new PigHoldAction(this));
             super.game.sendAction(act);
         }
         return;
